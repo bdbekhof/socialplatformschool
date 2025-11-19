@@ -1,10 +1,10 @@
 F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\controller\AuthController.java
-F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\service\UserService.java
-F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\repository\UserRepository.java
-F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\util\ValidationUtil.java
+F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\controller\PostController.java
 F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\model\Post.java
-F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\service\PostService.java
 F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\model\User.java
 F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\repository\PostRepository.java
+F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\repository\UserRepository.java
+F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\service\PostService.java
+F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\service\UserService.java
 F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\SocialplatformApplication.java
-F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\controller\PostController.java
+F:\Code\socialplatform\src\main\java\nl\bdbekhof\socialplatform\util\ValidationUtil.java
