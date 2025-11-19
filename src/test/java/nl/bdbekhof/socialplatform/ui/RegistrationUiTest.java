@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.Duration;
 
 import static com.jayway.jsonpath.internal.path.PathCompiler.fail;
@@ -22,6 +24,24 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class RegistrationUiTest {
 
     private WebDriver driver;
+    private void waitForServer(String url, int timeoutSec) {
+        long start = System.currentTimeMillis();
+        boolean ok = false;
+
+        while (!ok && (System.currentTimeMillis() - start) < timeoutSec * 1000) {
+            try {
+                HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+                con.setConnectTimeout(1000);
+                con.connect();
+                ok = (con.getResponseCode() < 500);
+            } catch (Exception ignore) {}
+
+            try { Thread.sleep(500); } catch (Exception ignored) {}
+        }
+
+        if (!ok) throw new IllegalStateException("Server did not start within timeout");
+    }
+
 
     @BeforeAll
     void setupDriver() {
@@ -32,6 +52,9 @@ public class RegistrationUiTest {
     void startBrowser() {
         ChromeOptions opts = new ChromeOptions();
         opts.addArguments("--headless=new");
+        opts.addArguments("--disable-gpu");
+        opts.addArguments("--disable-dev-shm-usage");
+        opts.addArguments("--no-sandbox");
         driver = new ChromeDriver(opts);
     }
 
@@ -43,8 +66,8 @@ public class RegistrationUiTest {
     @Test
     void registerNewUser() {
 
-        // WACHT tot Spring Boot echt gestart is
-        waitForServer();
+        // 60 second wait for GitHub ci to start server
+        waitForServer("http://localhost:8080/register", 60);
 
         driver.get("http://localhost:8080/register");
 
