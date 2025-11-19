@@ -51,4 +51,4 @@ jobs:
           done
 
       - name: Run UI tests
-        run: mvn -Dtest=com.example.social.ui.RegistrationUiTest test
+        run: mvn -Dtest=nl.bdbekhof.socialplatform.ui.RegistrationUiTest test
