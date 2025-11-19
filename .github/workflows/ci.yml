@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    services:
+      xvfb:
+        image: selenium/standalone-chrome:115.0
+        options: >-
+          --health-cmd "curl --fail http://localhost:4444/status || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
+
+      - name: Build and run unit+integration tests
+        run: mvn -B -DskipTests=false test
+
+      - name: Start application (for UI tests)
+        run: mvn -Dspring-boot.run.jvmArguments="-Dserver.port=8080" spring-boot:run &
+        env:
+          SPRING_PROFILES_ACTIVE: test
+
+      - name: Wait for server
+        run: |
+          for i in {1..30}; do
+            curl -sSf http://localhost:8080/ || sleep 1
+            if [ $? -eq 0 ]; then break; fi
+          done
+
+      - name: Run UI tests
+        run: mvn -Dtest=com.example.social.ui.RegistrationUiTest test
