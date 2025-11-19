@@ -3,6 +3,7 @@ package nl.bdbekhof.socialplatform.controller;
 import nl.bdbekhof.socialplatform.service.UserService;
 import nl.bdbekhof.socialplatform.model.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -11,14 +12,17 @@ public class AuthController {
     public AuthController(UserService userService) { this.userService = userService; }
 
     @GetMapping("/register")
-    public String registerForm() { return "register"; }
+    public String registerForm(Model model) {
+        model.addAttribute("user", new User());
+        return "register";
+    }
 
     @PostMapping("/register")
     public String register(@RequestParam String email,
                            @RequestParam String username,
                            @RequestParam String password) {
         if (userService.usernameExists(username)) {
-            return "register"; // in real app return error message
+            return "register";
         }
         userService.register(email, username, password);
         return "redirect:/login";

@@ -1,0 +1,11 @@
+nl\bdbekhof\socialplatform\service\PostService.class
+nl\bdbekhof\socialplatform\util\ValidationUtil.class
+nl\bdbekhof\socialplatform\model\User.class
+nl\bdbekhof\socialplatform\controller\AuthController.class
+nl\bdbekhof\socialplatform\service\UserService.class
+nl\bdbekhof\socialplatform\model\Post.class
+nl\bdbekhof\socialplatform\SocialplatformApplication.class
+nl\bdbekhof\socialplatform\repository\PostRepository.class
+nl\bdbekhof\socialplatform\config\SecurityConfig.class
+nl\bdbekhof\socialplatform\controller\PostController.class
+nl\bdbekhof\socialplatform\repository\UserRepository.class

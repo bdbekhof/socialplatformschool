@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: nl.bdbekhof.socialplatform.SocialplatformApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.119 s -- in nl.bdbekhof.socialplatform.SocialplatformApplicationTests
