@@ -10,12 +10,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Duration;
 
-import static com.jayway.jsonpath.internal.path.PathCompiler.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -23,7 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RegistrationUiTest {
 
+    @LocalServerPort
+    private int port;
+
     private WebDriver driver;
+
     private void waitForServer(String url, int timeoutSec) {
         long start = System.currentTimeMillis();
         boolean ok = false;
@@ -66,10 +70,12 @@ public class RegistrationUiTest {
     @Test
     void registerNewUser() {
 
-        // 60 second wait for GitHub ci to start server
-        waitForServer("http://localhost:8080/register", 60);
+        String url = "http://localhost:" + port + "/register";
 
-        driver.get("http://localhost:8080/register");
+        // 30 second wait for GitHub ci to start server
+        waitForServer(url, 30);
+
+        driver.get(url);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("email")));
@@ -79,19 +85,11 @@ public class RegistrationUiTest {
         driver.findElement(By.id("password")).sendKeys("Password123!");
         driver.findElement(By.id("register")).click();
 
-        assertTrue(driver.getCurrentUrl().contains("/login"));
-    }
+        // Wait for the page to make sure it contains /login. Otherwise, the test will error.
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.urlContains("/login"));
 
-    private void waitForServer() {
-        long start = System.currentTimeMillis();
-        while (System.currentTimeMillis() - start < 10000) {
-            try {
-                new java.net.URL("http://localhost:8080/register").openStream().close();
-                return; // server is up
-            } catch (Exception ignored) {
-                try { Thread.sleep(200); } catch (InterruptedException e) { }
-            }
-        }
-        fail("Server did not start within timeout");
+        assertTrue(driver.getCurrentUrl().contains("/login"));
+
     }
 }
